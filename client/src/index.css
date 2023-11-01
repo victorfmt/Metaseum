@@ -1,0 +1,46 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+  display: block;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+  text-align: float-left;
+  background-color:dimgrey;
+  display: block;
+}
+
+
+
+.RoomForm {
+  display: block;
+  background-color:grey;
+  z-index: 0;
+}
+
+form {
+  display: block;
+  float: right;
+  width: 30%;
+  margin: 0;
+}
+
+input {
+  display: block;
+  background-color: gray;
+}
+
+#my-canvas {
+  width: 50%;
+  z-index: -1;
+}
