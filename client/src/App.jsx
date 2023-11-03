@@ -54,6 +54,17 @@ function App() {
     const [currentUser, setCurrentUser] = useState(null);
     const [rooms, setRooms] = useState([]);
     const [objs, setObjs] = useState([]);
+    const [userObjs, setUserObjs] = useState([]);
+
+    useEffect(() =>{
+        fetch("/rooms/userroom").then((res) => {
+            if (res.ok) {
+                res.json().then((userObjs) => setUserObjs(userObjs));
+            }else{
+                console.log(res)
+            }
+        });
+    }, []);
 
     useEffect(() => {
         fetch("/rooms/museum").then((res) => {
@@ -144,7 +155,7 @@ function App() {
                 <UserDetails currentUser={currentUser} logout={logout} />
             ) : null}
             <RoomForm currentUser={currentUser} attemptRoomForm={attemptRoomForm} />
-            <Rooms rooms={rooms} objs={objs}/>
+            <Rooms rooms={rooms} objs={objs} userObjs={userObjs}/>
         </div>
     );
 }

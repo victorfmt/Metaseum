@@ -25,7 +25,12 @@ class User(db.Model, SerializerMixin):
 
     def to_dict(self):
         return {"id": self.id, "username": self.username}
-
+association_table = db.Table(
+    "association_table",
+    metadata,
+    db.Column("room_id", db.ForeignKey("rooms.id"), primary_key=True),
+    db.Column("obj_id", db.ForeignKey("objects.id"), primary_key=True),
+)
 class Object(db.Model, SerializerMixin):
     __tablename__ = "objects"
     
@@ -33,8 +38,10 @@ class Object(db.Model, SerializerMixin):
     name = db.Column(db.String, unique=True)
     obj_file = db.Column(db.String, unique=True)
     obj_info = db.Column(db.String)
-    
-    combiners = db.relationship("Combiner", back_populates="object")
+    rooms = db.relationship(
+        "Room", secondary=association_table, back_populates="objs"
+    )
+    # combiners = db.relationship("Combiner", back_populates="object")
     def to_dict(self):
         return {"id": self.id, "name": self.name, "file": self.obj_file}
 
@@ -47,21 +54,25 @@ class Room(db.Model, SerializerMixin):
     roomInfo = db.Column(db.String)
 
     user = db.relationship("User", back_populates="rooms")
-    combiners = db.relationship("Combiner", back_populates="room")
-    # objs = [c.object for c in combiners]
-    objs = association_proxy("combiners", "object")
+    # combiners = db.relationship("Combiner", back_populates="room")
+    # # objs = [c.object for c in combiners]
+    # objs = association_proxy("combiners", "object")
+    objs = db.relationship(
+        "Object", secondary=association_table, back_populates="rooms"
+    )
 
     def to_dict(self):
         return {"id": self.id, "name": self.name, "roomInfo": self.roomInfo,}
 
-class Combiner(db.Model, SerializerMixin):
-    __tablename__ = "combiners"
-    
-    id = db.Column(db.Integer, primary_key=True)
-    column = db.Column(db.String, nullable=False) #what this does
-    room_id = db.Column(db.Integer, db.ForeignKey("rooms.id")) 
-    obj_id = db.Column(db.Integer, db.ForeignKey("objects.id"))
 
-    room = db.relationship("Room", back_populates="combiners")
-    object = db.relationship("Object", back_populates="combiners")
+# class Combiner(db.Model, SerializerMixin):
+#     __tablename__ = "combiners"
+    
+#     id = db.Column(db.Integer, primary_key=True)
+#     column = db.Column(db.String, nullable=False) #what this does
+#     room_id = db.Column(db.Integer, db.ForeignKey("rooms.id")) 
+#     obj_id = db.Column(db.Integer, db.ForeignKey("objects.id"))
+
+#     room = db.relationship("Room", back_populates="combiners")
+#     object = db.relationship("Object", back_populates="combiners")
 

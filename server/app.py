@@ -3,7 +3,7 @@
 from flask import Flask, request, session, jsonify
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
-from models import db, User, Room, Object, Combiner
+from models import db, User, Room, Object
 from flask_cors import CORS
 app = Flask(__name__)
 app.secret_key = b"Y\xf1Xz\x00\xad|eQ\x80t \xca\x1a\x10K"
@@ -99,6 +99,59 @@ def get_museum():
         data_list.append(o.to_dict())
     return data_list, 200
 
+@app.get("/rooms/userroom")
+def get_userroom():
+    user_id = session.get('user_id')
+    room = Room.query.filter_by( user_id=user_id).first()
+    room_objs = room.objs
+    data_list = []
+    for o in room_objs:
+        o.to_dict()
+        data_list.append(o.to_dict())
+    return data_list, 200
+
+@app.route("/rooms/userroom", methods=["POST"])
+def add_obj_to_room():
+    # Assuming you have user authentication and the user's ID is stored in the session
+    user_id = session.get('user_id')
+    
+    # if not user_id:
+    #     return jsonify({'error': 'User not authenticated'}), 401
+    
+    # Get the data from the POST request
+    data = request.json
+    obj_id = data.get('obj_id')
+    
+    # Validate the received data (object_id and room_id should be present)
+    if not obj_id:
+        return jsonify({'error': 'Missing data'}), 400
+
+    # Fetch the room by ID and verify that it belongs to the user
+    room = Room.query.filter_by( user_id=user_id).first()
+    
+    if room is None:
+        return jsonify({'error': 'Room not found or you do not have permission to add objects to this room'}), 404
+    
+    # Fetch the object by ID
+    obj = Object.query.get(obj_id)
+    
+    if obj is None:
+        return jsonify({'error': 'Object not found'}), 404
+    
+    # Add the object to the room's object list
+    # This depends on how your Room and Object models are related; 
+    # here it's assumed that Room has a relationship to Object named 'objects'
+    room.objs.append(obj)
+    
+    # Commit the changes to the database
+    try:
+        db.session.add(room)
+        db.session.commit()
+        return jsonify({'success': 'Object added to room successfully'}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': 'Database error', 'message': str(e)}), 500
+
 # room = get room by user id
 # object = get object by obj_id_
 # room.objs.append(object)??
@@ -151,6 +204,7 @@ def create_room():
     roomName = data["room"]
     roomInfo = data["roomInfo"]
     user_id = session.get("user_id")
+    print(user_id)
     try:
         existing_room = Room.query.filter_by(name=roomName).first()
         if existing_room:

@@ -13,7 +13,7 @@ function RoomForm({ attemptRoomForm }) {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} >
             <h2>Get a Room!</h2>
 
             <input

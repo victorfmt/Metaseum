@@ -8,7 +8,7 @@ import Museum from "./Museum";
 // import SceneComponent from 'babylonjs-hook'; // if you install 'babylonjs-hook' NPM.
 // import "./App.css";
 
-function Rooms({ rooms, objs }) {
+function Rooms({ rooms, objs, userObjs }) {
 
     // let gltf = `{
     //     "asset": {
@@ -153,13 +153,13 @@ function Rooms({ rooms, objs }) {
     //     ]
     // }`
     
-    
+    console.log(userObjs)
     let box;
 
     async function onSceneReady(scene) {
        
         // This creates and positions a free camera (non-mesh)
-        const camera = new FreeCamera("camera1", new Vector3(10, 10, 10), scene);
+        const camera = new FreeCamera("camera1", new Vector3(0, 30, 10), scene);
 
         // This targets the camera to scene origin
         //camera.setTarget(Vector3.Zero());
@@ -179,68 +179,68 @@ function Rooms({ rooms, objs }) {
 
         // Our built-in 'box' shape.
         //box = MeshBuilder.CreateBox("box", { size: 1 }, scene);
-        objs.forEach(obj =>{
+        // objs.forEach(obj =>{
 
-            BABYLON.SceneLoader.Append("", "data:" + obj.file, scene, function (scene) {
-                // do something with the scene
-                scene.createDefaultCameraOrLight(true, true, true);
+        //     BABYLON.SceneLoader.Append("", "data:" + obj.file, scene, function (scene) {
+        //         // do something with the scene
+        //         scene.createDefaultCameraOrLight(true, true, true);
     
-                // The default camera looks at the back of the asset.
-                // Rotate the camera by 180 degrees to the front of the asset.
-                scene.activeCamera.alpha += Math.PI;
-                console.log(scene)
-              });
+        //         // The default camera looks at the back of the asset.
+        //         // Rotate the camera by 180 degrees to the front of the asset.
+        //         scene.activeCamera.alpha += Math.PI;
+        //         console.log(scene)
+        //       });
 
 
-        })
+        // })
         
-          BABYLON.SceneLoader.Append(process.env.PUBLIC_URL, "box.gltf", scene, function (scene) {
-                    //     // do something with the scene
+        //   BABYLON.SceneLoader.Append(process.env.PUBLIC_URL, "box.gltf", scene, function (scene) {
+        //             //     // do something with the scene
   
-          });
+        //   });
 
 
-          BABYLON.SceneLoader.Append(process.env.PUBLIC_URL, "box.gltf", scene, function (scene) {
+        //   BABYLON.SceneLoader.Append(process.env.PUBLIC_URL, "box.gltf", scene, function (scene) {
         
-            // ... [your existing code inside this function]
-            scene.createDefaultCameraOrLight(true, true, true);
+        //     // ... [your existing code inside this function]
+        //     scene.createDefaultCameraOrLight(true, true, true);
 
-            // The default camera looks at the back of the asset.
-            // Rotate the camera by 180 degrees to the front of the asset.
-            scene.activeCamera.alpha += Math.PI;
-            console.log(scene)
-            // Assuming your model has a single root mesh, or you know the name of the mesh:
-            const boxMesh = scene.getMeshByName("node1"); // Replace 'theNameOfYourMesh' with the actual name of your mesh. If you're unsure about the name, you can check it in a 3D editor like Blender or in Babylon's inspector.
-            console.log(scene.meshes)
-            console.log(boxMesh)
+        //     // The default camera looks at the back of the asset.
+        //     // Rotate the camera by 180 degrees to the front of the asset.
+        //     scene.activeCamera.alpha += Math.PI;
+        //     console.log(scene)
+        //     // Assuming your model has a single root mesh, or you know the name of the mesh:
+        //     const boxMesh = scene.getMeshByName("node1"); // Replace 'theNameOfYourMesh' with the actual name of your mesh. If you're unsure about the name, you can check it in a 3D editor like Blender or in Babylon's inspector.
+        //     console.log(scene.meshes)
+        //     console.log(boxMesh)
             
             
-            if (boxMesh) {
-                // Ensure the mesh has an action manager
-                if (!boxMesh.actionManager) {
-                    boxMesh.actionManager = new BABYLON.ActionManager(scene);
-                    console.log("if statement")
+        //     if (boxMesh) {
+        //         // Ensure the mesh has an action manager
+        //         if (!boxMesh.actionManager) {
+        //             boxMesh.actionManager = new BABYLON.ActionManager(scene);
+        //             console.log("if statement")
                     
-                }
+        //         }
         
-                // Add a pointer down action to the mesh
-                boxMesh.actionManager.registerAction(
-                    new BABYLON.ExecuteCodeAction(
-                        BABYLON.ActionManager.OnPickTrigger,
-                        function() {
-                            /*
-                            fetch()
-                            {
-                                clickedObjId: 
-                                userId: 
-                            }
-                            */ 
-                            alert('box.gltf was clicked!');
-                        }
-                    )
-                );
-            }
-        });
+        //         // Add a pointer down action to the mesh
+        //         boxMesh.actionManager.registerAction(
+        //             new BABYLON.ExecuteCodeAction(
+        //                 BABYLON.ActionManager.OnPickTrigger,
+        //                 function() {
+        //                     /*
+        //                     fetch()
+        //                     {
+        //                         clickedObjId: 
+        //                         userId: 
+        //                     }
+        //                     */ 
+        //                     alert('box.gltf was clicked!');
+        //                 }
+        //             )
+        //         );
+        //     }
+        // });
         
 
         
@@ -274,13 +274,14 @@ function Rooms({ rooms, objs }) {
     return (
         <div classname="rooms">
             <h1>Museum</h1>
+            
             <Museum antialias onSceneReady={onSceneReady} onRender={onRender} objs={objs} id="my-canvas" />
             <div>
                 <h2>User Galleries</h2>
             {rooms.map((room) => (
                 <h3 key={room.id}>
                     {room.id} {room.name} {room.roomInfo}
-                    <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} id={`canvas-${room.id}`} />
+                    <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} userObjs={userObjs}  id={`canvas-${room.id}`} />
                 </h3>
             ))}
             </div>
