@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { Engine, Scene } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 import * as BABYLON from "@babylonjs/core";
+
 export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, userObjs, ...rest }) => {
   const reactCanvas = useRef(null);
 
@@ -12,6 +13,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
 
       BABYLON.SceneLoader.Append("", "data:" + userObj.file, scene, function (scene) {
         scene.createDefaultCameraOrLight(true, true, true);
+        scene.clearColor = new BABYLON.Color3(0.0, 0.0, 0.0);
         scene.activeCamera.alpha += Math.PI;
         scene.meshes.forEach(mesh => {
           console.log(mesh.name)
@@ -24,7 +26,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
                 BABYLON.ActionManager.OnPickTrigger,
                 () => {
                   alert ('userObj was clicked!')
-                  // removeFromUserRoom(userObj.id)
+                  removeFromUserRoom(userObj.id)
                 }
               )
             )
@@ -33,6 +35,16 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
         })
       })
     })
+  }
+
+  function removeFromUserRoom(userObjId) {
+
+    fetch('/rooms/userroom/removeUserObj' + userObjId, {
+      method: 'DELETE',
+    })
+    .then(res => res.json())
+    .then(data => console.log(data))
+
   }
   // set up basic engine and scene
   useEffect(() => {

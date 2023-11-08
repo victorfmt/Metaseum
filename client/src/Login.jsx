@@ -30,7 +30,7 @@ function Login({ attemptLogin }) {
                 placeholder="password"
             />
 
-            <input type="submit" value="Login" />
+            <input className="button" type="submit" value="Login" />
         </form>
     );
 }

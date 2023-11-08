@@ -30,7 +30,7 @@ function Signup({ attemptSignup }) {
                 placeholder="password"
             />
 
-            <input type="submit" value="Signup" />
+            <input className="button" type="submit" value="Signup" />
         </form>
     );
 }

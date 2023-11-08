@@ -2,14 +2,31 @@ import { useEffect, useRef } from "react";
 import { Engine, Scene } from "@babylonjs/core";
 import "@babylonjs/loaders/glTF";
 import * as BABYLON from "@babylonjs/core";
+// import * as GUI from 'babylonjs-gui'
 
 export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, objs, ...rest }) => {
   const reactCanvas = useRef(null);
 
+  // var manager = new GUI.GUI3DManager(Scene);
+
+  // var panel = new GUI.StackPanel3D();
+  //   panel.margin = 0.02;
+  
+  //   manager.addControl(panel);
+  //   panel.position.z = -1.5;
+
+  // const advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+  // const button = GUI.Button.CreateSimpleButton('myBtn', 'Click Me!');
+  // button.width = '100px';
+  // button.height = '20px';
+  // button.collor = 'white';
+  // button.background = 'black';
+  // advancedTexture.addControl(button);
+
   const addShapesToScene = (scene) => {
     // const box = BABYLON.MeshBuilder.CreateBox("box", {size: 1}, scene);
     // box.position.x = -1.5;
-
+  
 
     console.log(objs)
 
@@ -22,6 +39,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
           // The default camera looks at the back of the asset.
           // Rotate the camera by 180 degrees to the front of the asset.
           scene.activeCamera.alpha += Math.PI;
+          
           scene.meshes.forEach(mesh => {
             console.log(mesh.name)
             if (mesh.name !== '__root__' && mesh.name !== 'ground'){
@@ -32,7 +50,9 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
                 new BABYLON.ExecuteCodeAction(
                   BABYLON.ActionManager.OnPickTrigger,
                   () => {
-                    alert('obj was clicked!')
+                    alert('you clicked me!')
+
+
                     addToUserRoom(obj.id);
                   }
                 )
@@ -51,7 +71,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
           //     }
           //   )
           // )
-
+          scene.mesh.addRotation(0, 0, Math.PI / 3);
           console.log(scene)
         });
       
@@ -130,6 +150,7 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
         addShapesToScene(scene);
     });
     }
+    scene.clearColor = new BABYLON.Color3(0.0, 0.0, 0.0);
 
     engine.runRenderLoop(() => {
       if (typeof onRender === "function") onRender(scene);
@@ -152,6 +173,24 @@ export default ({ antialias, engineOptions, adaptToDeviceRatio, sceneOptions, on
       }
     };
   }, [antialias, engineOptions, adaptToDeviceRatio, sceneOptions, onRender, onSceneReady, objs]);
+
+  // var addButton = function() {
+  //   var button = new GUI.Button3D("orientation");
+  //   panel.addControl(button);
+  //   button.onPointerUpObservable.add(function(){
+  //       panel.isVertical = !panel.isVertical;
+  //   });   
+    
+  //   var text1 = new GUI.TextBlock();
+  //   text1.text = "change orientation";
+  //   text1.color = "white";
+  //   text1.fontSize = 24;
+  //   button.content = text1;  
+  // }
+
+  // addButton();    
+  // addButton();
+  // addButton();
 
   return ( 
       <canvas ref={reactCanvas} {...rest} 

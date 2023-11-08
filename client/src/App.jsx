@@ -147,15 +147,31 @@ function App() {
 
     return (
         <div className="App">
-            <Signup attemptSignup={attemptSignup} />
-
-            <Login attemptLogin={attemptLogin} />
-
-            {currentUser ? (
-                <UserDetails currentUser={currentUser} logout={logout} />
-            ) : null}
-            <RoomForm currentUser={currentUser} attemptRoomForm={attemptRoomForm} />
+            <div className="Rooms">
             <Rooms rooms={rooms} objs={objs} userObjs={userObjs}/>
+            </div>
+            <div className="Nav">
+                <ul className="Nav_list">
+
+                {currentUser ? (
+                <UserDetails currentUser={currentUser} logout={logout} />
+                ) : null}  
+            {!currentUser ? (
+                <Signup attemptSignup={attemptSignup} />
+                ) : null} 
+            {!currentUser ? (
+                <Login attemptLogin={attemptLogin} />
+                ) : null} 
+            
+
+            
+
+            
+            <RoomForm currentUser={currentUser} attemptRoomForm={attemptRoomForm} />
+                </ul>
+            </div>
+            
+            
         </div>
     );
 }

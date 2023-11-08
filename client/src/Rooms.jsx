@@ -248,7 +248,7 @@ function Rooms({ rooms, objs, userObjs }) {
         //box.position.y = 1;
 
         // Our built-in 'ground' shape.
-        MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
+        // MeshBuilder.CreateGround("ground", { width: 6, height: 6 }, scene);
 
         // const assetArrayBuffer = await BABYLON.Tools.LoadFileAsync("assets/hermes.gltf", true);
         // const assetBlob = new Blob([assetArrayBuffer]);
@@ -273,16 +273,22 @@ function Rooms({ rooms, objs, userObjs }) {
 
     return (
         <div classname="rooms">
-            <h1>Museum</h1>
+            <h1 className="main_title">METASEUM</h1>
             
             <Museum antialias onSceneReady={onSceneReady} onRender={onRender} objs={objs} id="my-canvas" />
             <div>
                 <h2>User Galleries</h2>
             {rooms.map((room) => (
-                <h3 key={room.id}>
-                    {room.id} {room.name} {room.roomInfo}
-                    <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} userObjs={userObjs}  id={`canvas-${room.id}`} />
+               <div>
+               <h3 key={room.id}>
+                    {/* {room.id}  */}
+                    {room.name} 
                 </h3>
+                <p className="room_info">{room.roomInfo}</p>
+                    
+                
+                <SceneComponent antialias onSceneReady={onSceneReady} onRender={onRender} userObjs={userObjs}  id={`canvas-${room.id}`} />
+                </div>
             ))}
             </div>
         </div>

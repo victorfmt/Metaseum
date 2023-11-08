@@ -23,14 +23,15 @@ function RoomForm({ attemptRoomForm }) {
                 placeholder="room name"
             />
 
-            <input
+            <input 
+                className="description_input"
                 type="text"
                 onChange={handleChangeRoomInfo}
                 value={roomInfo}
                 placeholder="write something about your room!"
             />
 
-            <input type="submit" value="Create Room" />
+            <input className="button" type="submit" value="Create Room" />
         </form>
     );
 }
