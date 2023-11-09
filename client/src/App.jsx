@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import Login from "./Login";
 import Signup from "./Signup";
 import UserDetails from "./UserDetails";
+import Museum from "./Museum";
+import UserRoom from "./UserRoom";
 import Rooms from "./Rooms";
 import RoomForm from "./RoomForm";
 // import { FreeCamera, Vector3, HemisphericLight, MeshBuilder } from "@babylonjs/core";
@@ -55,6 +57,20 @@ function App() {
     const [rooms, setRooms] = useState([]);
     const [objs, setObjs] = useState([]);
     const [userObjs, setUserObjs] = useState([]);
+
+    const [showMuseum, setShowMuseum] = useState(true);
+
+    function handleClickSetShowMuseum() {
+        setShowMuseum(!showMuseum)
+    }
+
+    
+
+    // const [objMenu, showObjMenu] = useState([]);
+
+    // useEffect (() => {
+
+    // })
 
     useEffect(() =>{
         fetch("/rooms/userroom").then((res) => {
@@ -148,14 +164,35 @@ function App() {
     return (
         <div className="App">
             <div className="Rooms">
-            <Rooms rooms={rooms} objs={objs} userObjs={userObjs}/>
+            <h3 className="main_title">METASEUM
+            {/* <img src='blackpyramidtransparent.gif' alt='pyramid' /> */}
+            </h3>
+            {showMuseum ? (
+                <Museum antialias objs={objs} id="my-canvas" />
+                ) : <UserRoom antialias  userObjs={userObjs}  id="my-canvas" />}  
+            
+            
             </div>
             <div className="Nav">
                 <ul className="Nav_list">
+                
+                {/* <div className="logo"> */}
+                    <img className='logo' src='blackpyramidtransparent.gif' alt='pyramid' />
+                {/* </div> */}
 
                 {currentUser ? (
                 <UserDetails currentUser={currentUser} logout={logout} />
                 ) : null}  
+
+            {currentUser ? (
+                <button className="myRoom_button" onClick={handleClickSetShowMuseum}>
+                    {showMuseum ? 
+                    "My Room" : "Museum"}
+                    
+                </button>
+
+            ) : null}
+
             {!currentUser ? (
                 <Signup attemptSignup={attemptSignup} />
                 ) : null} 
