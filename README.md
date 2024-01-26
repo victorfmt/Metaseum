@@ -1,13 +1,11 @@
-# Flask Auth
+# METASEUM
 
-## Learning Goals
+- About:
 
-- Use the session object to authenticate a user
+Metaseum is a 3D WEB APP that allows the user to explore a native browser 3D environment while learning historical facts about the objects and places they encounter in their journey. The user can select and collect any objects of their choosing. The user can create their own gallery and share their curated collections with other users. 
 
-- Securely store the password in a hash
+- Tech Stuff:
 
-- Use the session object to determine when a user is logged in
-
-- Authorize only certain resources depending on whether a user is logged in
+Metaseum was developed using React, Flask, SQL, and Babylon.JS. Perhaps the most interesting aspect of this program is that 3D objects in .gltf format are stored in SQL database as strings allowing for multiple databases and economical ways to store complex 3D objects. 
 
 
